@@ -575,4 +575,10 @@ async def on_ready():
         await fetch_and_log()
 
 
-bot.run(os.getenv("WINLOGGER_TOKEN", os.getenv("DISCORD_TOKEN")))
+_token = os.getenv("WINLOGGER_TOKEN")
+if not _token:
+    _token = os.getenv("DISCORD_TOKEN")
+print(f"[env] WINLOGGER_TOKEN = {'<set>' if _token else 'MISSING (None)'} (len={len(_token) if _token else 0})")
+if not _token:
+    print("[env] FATAL: no WINLOGGER_TOKEN or DISCORD_TOKEN env var found - check Wispbyte Startup > Environment Variables")
+bot.run(_token)
