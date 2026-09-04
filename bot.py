@@ -578,7 +578,14 @@ async def on_ready():
 _token = os.getenv("WINLOGGER_TOKEN")
 if not _token:
     _token = os.getenv("DISCORD_TOKEN")
+if not _token:
+    try:
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "token.txt"), "r") as _f:
+            _token = _f.read().strip()
+        print("[env] loaded token from token.txt")
+    except Exception as _e:
+        print(f"[env] token.txt not found: {_e}")
 print(f"[env] WINLOGGER_TOKEN = {'<set>' if _token else 'MISSING (None)'} (len={len(_token) if _token else 0})")
 if not _token:
-    print("[env] FATAL: no WINLOGGER_TOKEN or DISCORD_TOKEN env var found - check Wispbyte Startup > Environment Variables")
+    print("[env] FATAL: no WINLOGGER_TOKEN/DISCORD_TOKEN env var or token.txt found")
 bot.run(_token)
